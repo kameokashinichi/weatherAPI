@@ -1,0 +1,105 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Wed Sep  5 10:08:52 2018
+
+@author: kameokashinichi
+"""
+
+memo in 180905
+
+#for Agri sasamoto generated in 2018-09-05
+  "latitude" : "35.706179",
+  "longitude" : "140.482362",
+
+forecast from Apr to Jun -> '20180830-050845-7gwrf2gq' -> updated by march (8/30) 
+crop simulation(tp_date:04-25) -> '2018-09-05T01-04-13-673Ze6901fca35437299'
+
+forecast from May to July -> '20180830-051503-qpv0fr05' -> updated by april (8/30)
+crop simulation(tp_date:04-25) -> "2018-09-05T01-12-22-180Z5ddcde49026dd414"
+
+forecast from Jun to Aug -> '20180830-051723-utdvab94' -> updated by may (8/30)
+crop simulation(tp_date:04-25) -> "2018-09-05T01-13-37-648Zd7963b279384a38f"
+
+forecast from July to Sep -> '20180830-052000-mya8ym20' -> updated by jun (8/30)
+crop simulation(tp_date:04-25) -> "2018-09-05T01-14-51-801Z36d47fe10304701a"
+
+forecast from Aug to Oct -> '20180830-052216-ilpj933m' -> updated by july  (8/30)
+crop simulation(tp_date:04-25) -> "2018-09-05T01-15-56-592Zd414f40c8b8f3d7d"
+
+forecast from Sep to Nov -> '20180830-052421-420fvquq' -> updated by august (8/30)
+crop simulation(tp_date:04-25) -> "2018-09-05T01-16-53-046Z4098ccb6fc4db9a6"
+
+
+
+No forecast part1 -> '20180830-053735-lby3ohi3' -> updated by march (8/30)
+crop simulation(tp_date:04-25) -> "2018-09-05T01-18-46-739Zb4af9a3f136fc5f4"
+
+No forecast part2 -> '20180830-053606-cg0su_bm' -> updated by April (8/30)
+crop simulation(tp_date:04-25) -> "2018-09-05T01-19-55-552Z35ae51892ead95a7"
+
+No forecast part3 -> '20180830-053821-nrdkenj8' -> updated by may (8/30)
+crop simulation(tp_date:04-25) -> "2018-09-05T01-20-43-994Z2cd09a9a6b56dbd7"
+
+No forecast part4 -> '20180830-053902-c7s6p8u3' -> updated by june (8/30)
+crop simulation(tp_date:04-25) -> "2018-09-05T01-21-27-303Zee1ef878836dfdfa"
+
+No forecast part5 -> '20180830-053943-84m22cda' -> updated by july (8/30)
+crop simulation(tp_date:04-25) -> "2018-09-05T01-22-13-955Zdc661a263b204df8"
+
+No forecast part6 -> '20180830-054017-kziinh23' -> updated by august (8/30)
+crop simulation(tp_date:04-25) -> "2018-09-05T01-23-15-143Z0a199cd4772d5e3f"
+
+
+##compare 2018's weather with normal weather. 
+
+past = dict()
+wth = list(filter(lambda x: re.search('.WTH', x), os.listdir('180905_sasa_wth')))
+for i in wth: 
+    a = WTH2Dataframe('180905_sasa_wth', i)
+    past.update({i[:4]: a})
+
+
+dflist = []
+for i in wth: 
+    a = WTH2Dataframe('180905_sasa_wth', i)
+    dflist.append(a)
+
+avedf = generateListOfStatistics(dflist, mode='average')
+
+monstats = monthlyWeatherStatsFromList(dflist)
+
+df2018 = WTD2DataFrame('Chiba2018.wtd')
+
+stat2018=monthlyWeatherStatsInSingleYear(df2018)
+
+visualizeComparedTwoDataWithBar(monstats, 'normal', stat2018, 
+                                '2018', 'mean', 'TMAX', 'celcius', 
+                                '180905_2018VSnormal_TMAX.png')
+
+visualizeComparedTwoData(monstats, 'normal', stat2018, '2018', 
+                         'mean', 'TMIN', 'celcius', 
+                         '180905_2018VSnormal_TMAX.png')
+
+visualizeComparedTwoDataWithBar(monstats, 'normal', stat2018, 
+                                '2018', 'mean', 'TMIN', 'celcius', 
+                                '180914_2018VSnormal_TMIN.png')
+
+
+#180907_for myoko city
+latitude: 36.935061,
+longitude: 137.9125317
+
+for i in range(1980, 2019):
+    getHistoricalData(36.935061, 137.9125317, repr(i)+'-01-01',repr(i)+'-12-31', 'myoko'+repr(i))
+
+import shutil
+
+myoko = list(filter(lambda x: re.search('^myoko', x), os.listdir()))
+
+import os
+os.mkdir('/Users/kameokashinichi/Documents/postdoc/simriw_python/myoko_wtd')
+
+for i in range(len(myoko)):
+    shutil.move(src=myoko[i], dst='/Users/kameokashinichi/Documents/postdoc/simriw_python/myoko_wtd')
+

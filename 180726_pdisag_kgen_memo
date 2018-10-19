@@ -1,0 +1,125 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Jul 26 13:44:30 2018
+
+@author: kameokashinichi
+"""
+
+"""
+variable memo in 180726
+
+pdisaglist -> the list for active pdisagws scenario id
+pdisaglist = getSucceedScenarioIdDictFromList(ids[30:60], pdisag=True)['pdisagws']
+(pdisaglist[-2] -> 33;34;33)
+pid = pdisaglist[-2]
+#edited in 7/27
+pid -> '20180709-010426-qACEQW'
+wth = extractWTHFromDirectory(pid)
+wth = list(filter(lambda x : re.search('\w{4}1801', x), wth))
+pdflist -> list of pdisagws dataframe
+pdisstat -> list of monthly statistics
+
+kgenlist -> the list of active kgen scenario ID
+kgenlist = getKGenResultIdList()
+(all the scenario in kgenlist -> 33:34:33)
+kid = kgenlist[0]
+#edited in 7/27
+kid -> '20180726-002620-470xhor5'
+kwth = extractWTHFromDirectory(kid)
+kdflist -> list of kgen dataframe
+kdisstat -> list of monthly statistics
+
+tomorrow -> run simriw by using 30 year 
+"""
+
+wth = extractWTHFromDirectory(pid)
+wth = list(filter(lambda x : re.search('\w{4}1801', x), wth))
+pdflist = []
+for i in range(len(wth)):
+    a = WTH2Dataframe(pid, wth[i])
+    pdflist.append(a)
+
+kwth = extractWTHFromDirectory(kid)
+kdflist = []
+for i in range(len(kwth)):
+    a = WTH2Dataframe(kid, kwth[i])
+    kdflist.append(a)
+
+
+#convert doy to month/date
+
+date = []
+for i in range(1, 13):
+    if i == 2:
+        for j in range(1, 29):
+            a = repr(i) + '/' + repr(j)
+            date.append(a)
+    elif i == 4 or i == 6 or i == 9 or i == 11:
+        for j in range(1, 31):
+            a = repr(i) + '/' + repr(j)
+            date.append(a)
+    else:
+        for j in range(1, 32):
+            a = repr(i) + '/' + repr(j)
+            date.append(a)        
+        
+year = generateYearList()        
+
+
+for i in range(len(pdflist)):
+    pdflist[i].index = year
+    kdflist[i].index = year
+
+
+import matplotlib.pyplot as plt
+#generate monthly statistics
+jan = list(filter(lambda x: re.search('^1/', x), kdflist[0].index))
+kdflist[0].loc[jan, kdflist[0].columns[0]]
+
+#visualize the difference of median value of SRAD
+mon = ['jan', 'feb', 'mar', 'apr', 'may', 'jun', 'july', 'aug',
+       'sep', 'oct', 'nov', 'dec']
+fig = plt.figure()
+ax = fig.add_subplot(1, 1, 1)
+
+ax.plot(np.arange(0, len(searchElementforX(pdisstat, "median")), 1), 
+        searchElementforX(pdisstat, "median").loc[:, 'SRAD'], 
+        label = 'pdisagws', color = 'red')
+ax.plot(np.arange(0, len(searchElementforX(kgenstat, "median")), 1), 
+        searchElementforX(kgenstat, "median").loc[:, 'SRAD'], 
+        label = 'kgen', color = 'blue')
+
+plt.legend(loc = 'best')
+plt.title('KGen VS Pdisagws SRAD median')
+plt.xlabel('month')
+plt.ylabel('SRAD(MJ/m2)')
+plt.xticks(np.arange(0, len(searchElementforX(kgenstat, "median")), 1), 
+           mon, rotation=30)
+
+plt.show()
+
+
+fig, axes = plt.subplots(4, 1, sharex=True, figsize = (7, 8))
+
+unit = ['MJ/m2', 'celcius', 'celcius', 'mm']
+for i in range(4):
+    axes[i].plot(np.arange(0, len(searchElementforX(pdisstat, "median")), 1), 
+            searchElementforX(pdisstat, "median").iloc[:, i], 
+            label = 'pdisagws', color = 'red')
+    axes[i].plot(np.arange(0, len(searchElementforX(kgenstat, "median")), 1), 
+            searchElementforX(kgenstat, "median").iloc[:, i], 
+            label = 'kgen', color = 'blue')
+
+    axes[i].legend(bbox_to_anchor = (1.1, 0.9))
+    axes[i].set_title('KGen VS Pdisagws ' + kgenstat.columns[i] + ' median')
+    axes[i].set_ylabel(kgenstat.columns[i] + ' (' + unit[i] + ')')
+plt.xlabel('month')    
+plt.xticks(np.arange(0, len(searchElementforX(kgenstat, "median")), 1), 
+               mon, rotation=30)
+
+plt.show()
+
+
+
+

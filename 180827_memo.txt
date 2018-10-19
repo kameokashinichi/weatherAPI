@@ -1,0 +1,77 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Aug 27 09:33:07 2018
+
+@author: kameokashinichi
+"""
+
+#variable memo in 2018-08-27
+#for Yosano cho
+            "latitude": "35.504721",
+            "longitude": "135.101722"
+
+
+forecast from Apr to Jun -> '20180827-003943-t58om4r4' -> updated by march (8/30)
+forecast from May to July -> '20180827-005046-p4p24xkv' -> updated by april (8/30)
+forecast from Jun to Aug -> '20180827-005951-_4273khn' -> updated by may (8/30)
+forecast from July to Sep -> '20180827-010751-yki6edq2' -> updated by jun (8/30)
+forecast from Aug to Oct -> '20180827-011448-noqna5ft' -> updated by july  (8/30)
+forecast from Sep to Nov -> '20180827-012155-wp0wfkvi' -> updated by august (8/30)
+
+
+#for Agri sasamoto generated in 2018-08-30
+  "latitude" : "35.706179",
+  "longitude" : "140.482362",
+
+forecast from Apr to Jun -> '20180830-050845-7gwrf2gq' -> updated by march (8/30) 
+crop simulation -> '2018-08-31T03-22-12-811Z20b258781eaba05c'
+
+forecast from May to July -> '20180830-051503-qpv0fr05' -> updated by april (8/30)
+crop simulation -> "2018-08-31T03-26-02-226Za64468186b6690cd"
+
+forecast from Jun to Aug -> '20180830-051723-utdvab94' -> updated by may (8/30)
+crop simulation -> "2018-08-31T03-27-02-585Z2db8529f80bfb770"
+
+forecast from July to Sep -> '20180830-052000-mya8ym20' -> updated by jun (8/30)
+crop simulation -> "2018-08-31T03-28-07-637Z0bca5017787cc3d0"
+
+forecast from Aug to Oct -> '20180830-052216-ilpj933m' -> updated by july  (8/30)
+crop simulation -> "2018-08-31T03-28-56-655Z64d926ece59ce629"
+
+forecast from Sep to Nov -> '20180830-052421-420fvquq' -> updated by august (8/30)
+crop simulation -> "2018-08-31T03-30-04-635Z0bccd9bd7700eec8"
+
+
+
+No forecast part1 -> '20180830-053735-lby3ohi3' -> updated by march (8/30)
+crop simulation -> "2018-09-02T23-53-52-371Z7f025fe6bb38e472"
+
+No forecast part2 -> '20180830-053606-cg0su_bm' -> updated by April (8/30)
+crop simulation -> "2018-09-02T23-55-56-744Zb0545d972a5b1ce1"
+
+No forecast part3 -> '20180830-053821-nrdkenj8' -> updated by may (8/30)
+crop simulation -> "2018-09-02T23-56-40-624Zc96f7cff19ceacdc"
+
+No forecast part4 -> '20180830-053902-c7s6p8u3' -> updated by june (8/30)
+crop simulation -> "2018-09-02T23-58-10-837Z23824d4b160eb10d"
+
+No forecast part5 -> '20180830-053943-84m22cda' -> updated by july (8/30)
+crop simulation -> "2018-09-02T23-59-35-159Z72314e558945d173"
+
+No forecast part6 -> '20180830-054017-kziinh23' -> updated by august (8/30)
+crop simulation -> "2018-09-03T00-01-17-636Ze62fc3b41d1d35eb"
+
+
+
+
+
+for i in range(1980, 2017):
+    getHistoricalData(35.706179, 140.482362, repr(i)+'-01-01',repr(i)+'-12-31', 'sasa'+repr(i))
+
+
+
+
+
+
+

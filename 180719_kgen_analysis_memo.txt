@@ -1,0 +1,60 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Jul 19 16:38:04 2018
+
+@author: kameokashinichi
+"""
+
+180719_memo
+
+"""
+memo
+
+kgen -> ID list of generated weather scenarios
+idlist -> list of weather ID []
+
+ankgen -> bn_nn_an="20:30:50" -> 'ID'='20180719-052112-4wdjudny'
+anwthlist -> list of 500 WTH files
+andflist -> list of 500 dataframe
+anave -> dataframe for average value
+
+bnkgen -> bn_nn_an="50:30:20" -> 'ID'='20180719-052209-2oeu2v17'
+bnwthlist -> list of 500 WTH files
+bndflist -> list of 500 dataframe
+bnave -> dataframe for average value
+
+nnkgen -> bn_nn_an="33:34:33" -> 'ID'='20180713-101459-cut4e4rj'
+nnwthlist -> list of 500 WTH files
+nndflist -> list of 500 dataframe
+nnave -> dataframe for average value
+
+wth -> list of 100WTH files (bn_nn_an = 33:34:33)
+wthdf -> list of 100 dataframe (bn_nn_an = 33:34:33)
+avedf -> dataframe for average value
+
+wthBN -> list of 100WTH files (bn_nn_an = 50:30:20)
+wthBNdf -> list of 100 dataframe (bn_nn_an = 50:30:20)
+aveBNdf -> dataframe for average value
+
+
+#edited in 7/26
+In order to visualize the summary of the Kgen result
+
+1. get directory of specified ID by using getAndOpenWeatherZip(id) function
+2. get .wth file list from the specified ID by extractWTHFromDirectory(id)
+3. 
+
+example
+
+getAndOpenWeatherZip('20180726-002620-470xhor5')
+wth = extractWTHFromDirectory('20180726-002620-470xhor5')
+wdflist = []
+for i in range(len(wth)):
+    a = WTH2Dataframe('20180726-002620-470xhor5', wth[i])
+    wdflist.append(a)
+    
+avedf = generateListOfStatistics(wdflist, mode='average')
+visualizeWeather(avedf, '33:34:33')
+    
+"""

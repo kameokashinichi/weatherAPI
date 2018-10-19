@@ -1,0 +1,98 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Fri Oct 12 06:32:58 2018
+
+@author: kameokashinichi
+"""
+"""
+181012 visualize normal weather VS weather in each single year
+    compare the temperature(Max and Min)
+"""
+
+import re
+import os
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+#prepare the dictionary for weather data
+past = dict()  #final dictionary
+wtd = list(filter(lambda x: re.search('.wtd', x), os.listdir('sasamoto_wtd')))
+for i in wtd: 
+    a = WTD2DataFrame('sasamoto_wtd/'+i)
+    past.update({i[4:8]: a})
+
+#prepare the list for weather data
+dflist = []  #final list
+for i in wtd: 
+    a = WTD2DataFrame('sasamoto_wtd/'+i)
+    dflist.append(a)
+
+
+#prepare new list for weatehr dataframe(delete 29th Feburary)
+new_dflist = []
+for i in range(1980, 2017):
+    #if the year is uruu, delete the data of 29th Feb
+    if i%4 == 0:
+        arr = np.arange(0, 366, 1)
+        arr = np.delete(arr, 59)
+        data = past[repr(i)].iloc[arr, :]
+    else:
+        data = past[repr(i)]
+        
+    new_dflist.append(data)
+
+"""
+181012 generate the average daily max, min temperature
+procedure
+    1. prepare dataframe which contains final result for average weather data
+    ~iterating dataframe sizes~
+    2. prepare list to store the 37years' data 
+    3. calculate the average value for the list
+    4. apply calculated average data to appropriate columns
+    5. visualize the average and specified year of data
+
+"""
+
+#final dataframe which stores average value of daily weather
+avr_df = pd.DataFrame(index=np.arange(1, 366, 1), columns=new_dflist[0].columns)
+
+for i in range(len(avr_df.index)):
+    for j in range(len(avr_df.columns)):
+        lis = []
+        for k in range(len(new_dflist)):
+            lis.append(new_dflist[k].iloc[i, j])
+            
+        ave = mean(lis)
+        avr_df.iloc[i, j] = ave
+"""
+the columns of the dataframe which contains average data for 37 years
+    ['SRAD', 'TMAX', 'TMIN', 'RAIN']
+"""
+#visualize average vs particualr year's daily weather
+
+fig = plt.figure()
+ax = fig.add_subplot(1,1,1)
+
+ax.plot(np.arange(1, 366, 1), avr_df.iloc[:, 1], color='r', label='average', linewidth=1.5)
+ax.plot(np.arange(1, 366, 1), past['2013'].iloc[:, 1], color='b', label='2013', linewidth=1.5)
+
+plt.legend(loc='best')
+plt.title('TMAX ~Average VS 2012~')
+plt.xlabel('Date Of Year(day)')
+plt.ylabel('Temperature(celcius)')
+
+plt.show()
+
+
+
+
+
+
+
+
+
+
+
+
